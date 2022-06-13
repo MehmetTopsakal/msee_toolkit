@@ -32,6 +32,10 @@ def get_fl(pattern,mode=['ISS']):
         
             if mode[0] == 'ISS':
                 l = linecache.getline(f, mode[1])
+                dt = datetime.datetime.strptime('%s_%s'%(l.split()[2],l.split()[3]),
+                                                "%m/%d/%Y_%H:%M:%S")
+            if mode[0] == 'ISS_old':
+                l = linecache.getline(f, mode[1])
                 dt = datetime.datetime.strptime('%s_%s'%(l.split()[3],l.split()[4]),
                                                 "%m/%d/%Y_%H:%M:%S")
             elif mode[0] == 'ISS_2021_3':
