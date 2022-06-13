@@ -1,8 +1,21 @@
 
+
+import os,sys,datetime
+import glob,linecache,shutil
+import numpy as np
+import xarray as xr
+
+import matplotlib.pyplot as plt
+
 from larch.io import read_ascii,read_athena
 from larch.xafs import find_e0,pre_edge,autobk,xftf
 from larch import Group
 import larch
+
+from copy import deepcopy
+
+
+
 
 def get_fl(pattern,mode=['ISS']):
     
@@ -128,7 +141,6 @@ def read_as_ds(fl_in,mode='ISS',Eshift=0,
 
         if plot_ref and MUs_r != []:
         
-            ax2 = fig.add_subplot(1,2,2)
             for e,i in enumerate(MUs_r):
                 ax2.plot(Es[e],i,label=fl_in[e][1]+' (ind:%d time:%s)'%(e,fl_in[e][0]))
             ax2.set_xlabel('E (eV)')
@@ -151,7 +163,7 @@ def read_as_ds(fl_in,mode='ISS',Eshift=0,
         da_f = xr.DataArray(data=arr_f[:,imin:imax],
                           coords=[np.arange(len(fl_in)), E[imin:imax]],
                           dims=['scan_num', 'energy']) 
-        da_f.scan_num.attrs["files"] = fl
+        da_f.scan_num.attrs["files"] = fl_in
         ds['mu_fluo']  = deepcopy(da_f)
 
         try:
@@ -159,7 +171,7 @@ def read_as_ds(fl_in,mode='ISS',Eshift=0,
             da_r = xr.DataArray(data=arr_r[:,imin:imax],
                               coords=[np.arange(len(fl_in)), E[imin:imax]],
                               dims=['scan_num', 'energy'])
-            da_r.scan_num.attrs["files"] = fl
+            da_r.scan_num.attrs["files"] = fl_in
             ds['mu_ref']   = deepcopy(da_r)
         except:
             pass
@@ -219,7 +231,7 @@ def normalize_and_flatten(da_in,e0=None,pre1=None,pre2=None,
                           rbkg=1.0,kweight=1,kmin=2,kmax=10,dk=0.1,window='hanning',
                           ave_method='mean',xlim=None,
                           plot=True,figsize=(12,7),
-                          show_edge_regions=True, show_raw=True,
+                          show_edge_regions=True, show_raw=True,raw_plot_axes=[0.25, 0.25, 0.2, 0.45],
                           legend=False,show_std=True): 
 
 
@@ -373,7 +385,7 @@ def normalize_and_flatten(da_in,e0=None,pre1=None,pre2=None,
         
 
         elif show_raw:
-            ax = fig.add_axes([0.25, 0.25, 0.2, 0.45])
+            ax = fig.add_axes(raw_plot_axes)
 
             for e,i in enumerate(da_mus):
                 i.plot.line('-',ms=1,ax=ax,label=da_in.scan_num.attrs['files'][e][1].split('/')[-1])
