@@ -88,9 +88,11 @@ def read_as_ds(fl_in,mode='ISS',Eshift=0,
             MUs_f.append(d[4]/d[1])
             MUs_r.append(-np.log(d[3]/d[2]))    
             Es.append(d[0])
-        if mode == 'QAS':
-            MUs_f.append(d[1]/d[2])
-            MUs_r.append(np.log(d[1]/d[3]))    
+        elif mode == 'QAS':
+            # MUs_f.append(d[1]/d[2])
+            # MUs_r.append(np.log(d[1]/d[3]))    
+            MUs_f.append(d[4]/d[1])
+            MUs_r.append(-np.log(d[2]/d[1]))   
             Es.append(d[0])
         elif mode == 'BMM':        
             MUs_f.append(d[3])
