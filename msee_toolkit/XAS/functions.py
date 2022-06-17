@@ -72,8 +72,16 @@ def get_fl(pattern,mode=['ISS']):
 
 
 
-def read_as_ds(fl_in,mode='ISS',Eshift=0,
-               imin=0,imax=-1,plot=True,legend=False,plot_ref=True,xlim=None,
+def read_as_ds(fl_in,
+               mode='ISS',
+               sdd_cols=[9,9+4,9+4+4,9+4+4+4],
+               Eshift=0,
+               imin=0,
+               imax=-1,
+               plot=True,
+               legend=False,
+               plot_ref=True,
+               xlim=None,
                cut=0):
     Es = []
     MUs_f = []
@@ -86,6 +94,10 @@ def read_as_ds(fl_in,mode='ISS',Eshift=0,
         d = np.loadtxt(i[1],unpack=True)
         if mode == 'ISS':
             MUs_f.append(d[4]/d[1])
+            MUs_r.append(-np.log(d[3]/d[2]))    
+            Es.append(d[0])
+        elif mode == 'ISS_SDD':
+            MUs_f.append(-(d[sdd_cols[0]]+d[sdd_cols[1]]+d[sdd_cols[2]]+d[sdd_cols[3]])/d[1])
             MUs_r.append(-np.log(d[3]/d[2]))    
             Es.append(d[0])
         elif mode == 'QAS':
