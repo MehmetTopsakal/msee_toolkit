@@ -108,7 +108,8 @@ def read_as_ds(fl_in,
             Es.append(d[0])
         elif mode == 'BMM':        
             MUs_f.append(d[3])
-            MUs_r.append(-np.log(d[6]/d[4]))    
+            #MUs_r.append(-np.log(d[6]/d[4]))
+            MUs_r.append(-np.log(d[6]/d[5]))
             Es.append(d[0])
         elif mode == '12BM':        
             MUs_f.append(d[9]/d[2])   
