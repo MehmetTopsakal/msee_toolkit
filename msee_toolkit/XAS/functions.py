@@ -205,10 +205,12 @@ def read_as_ds(fl_in,
     except Exception as exc:
         print(exc)
         print('Unable to create dataset. Something is wrong')
-        if plot and legend:
-            ax1.legend(fontsize=8,loc='best',frameon=False)
-            ax1.set_xlim(xlim)
-
+        if plot_fluo and legend :
+            ax_f.legend(fontsize=8,loc='best',frameon=False)
+            ax_f.set_xlim(xlim)
+        if plot_ref and legend :
+            ax_r.legend(fontsize=8,loc='best',frameon=False)
+            ax_r.set_xlim(xlim)
 
     return ds
 
