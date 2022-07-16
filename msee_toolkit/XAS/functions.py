@@ -112,8 +112,8 @@ def read_as_ds(fl_in,
             MUs_r.append(-np.log(d[6]/d[5]))
             Es.append(d[0])
         elif mode == '12BM':
-            MUs_f.append(d[9]/d[2])
-            MUs_r.append(d[7]/d[2])
+            MUs_f.append(d[9])
+            MUs_r.append(d[7])
             Es.append(d[0])
         elif mode == '20ID_98':
             MUs_f.append(d[9]/d[8])
