@@ -56,6 +56,16 @@ def get_fl(pattern,mode=['ISS']):
                 l = linecache.getline(f, mode[1]).split()
                 dt = datetime.datetime.strptime('%s_%s_%s'%(l[9],l[10],l[11][0:2]),
                                                 "%m/%d/%Y_%I:%M:%S_%p") 
+            elif mode[0] == 'SSRL':
+                # mode[1]==21
+                l = linecache.getline(f,mode[1])
+                if l=='# ///\n':
+                    l = linecache.getline(f,mode[1]-1)
+                if l=='#    Note: mono d_spacing is nominal!\n':
+                    l = linecache.getline(f,mode[1]-2)
+                dt = datetime.datetime.strptime('%s %s'%(l.split()[2],l.split()[3]),
+                                                '%Y-%m-%d %H:%M:%S')
+
                 
             fl_in.append([dt.timestamp(),dt,f])   
 
@@ -135,6 +145,14 @@ def read_as_ds(fl_in,
             MUs_f.append(-np.log(d[6]/d[5]))
             MUs_r.append(-np.log(d[6]/d[5]))
             Es.append(d[0])
+        elif mode == 'SSRL':
+            if len(d)==4:
+                #with ref
+                MUs_f.append(-np.log(d[2]/d[1]))
+                MUs_r.append(-np.log(d[3]/d[1]))
+            else:
+                MUs_f.append(-np.log(d[2]/d[1]))
+            Es.append(d[0])
 
     if plot:
 
@@ -200,8 +218,6 @@ def read_as_ds(fl_in,
             ds['mu_ref']   = deepcopy(da_r)
         except:
             pass
-
-
     except Exception as exc:
         print(exc)
         print('Unable to create dataset. Something is wrong')
